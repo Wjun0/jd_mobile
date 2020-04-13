@@ -2,6 +2,8 @@
 from multiprocessing import Pool
 import time
 
+from jd.mobile import Jd_mobile
+
 
 class T(object):
 
@@ -29,8 +31,10 @@ class T(object):
 
 
 if __name__ == '__main__':
-    start_time = time.time()
-    t = T()
-    t.run()
-    print("耗时：",start_time-time.time())
-    print('hello')
+    # start_time = time.time()
+    # t = T()
+    # t.run()
+    # print("耗时：",start_time-time.time())
+
+    jd = Jd_mobile()
+    jd.run()

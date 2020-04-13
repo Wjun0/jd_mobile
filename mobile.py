@@ -115,16 +115,16 @@ class Jd_mobile(object):
 
         # 调用多进程
         # self.mult(detail_url_list)
-        # p = Pool(4)
-        # for url in detail_url_list[:2]:
-        #     p.apply_async(self.parse, args=(url,))
-        # p.close()
-        # p.join()
+        p = Pool(8)
+        for url in detail_url_list[:2]:
+            p.apply_async(self.parse, args=(url,))
+        p.close()
+        p.join()
 
 
         #不使用多进程跑程序
-        for url in detail_url_list[:2]:
-            self.parse(url)
+        # for url in detail_url_list[:2]:
+        #     self.parse(url)
 
 
 
