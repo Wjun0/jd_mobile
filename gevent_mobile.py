@@ -12,7 +12,7 @@ from lxml.html import etree
 from pymongo import MongoClient
 import multiprocessing
 from multiprocessing import Pool
-
+from my_redis_filter import Redis_filter
 
 #要爬取的商品信息
 class Item(object):
@@ -54,6 +54,14 @@ class Jd_mobile(object):
             print("开始爬取商品 {} ".format(data_sku))
 
             get_sku_url = "https://p.3.cn/prices/mgets?skuIds=J_{}".format(data_sku)
+
+
+            # ft = Redis_filter()
+            # d = ft.get(get_sku_url)
+            # if d:
+            #     print('__________该商品已经存在！________跳过该商品')
+            #     continue
+            # ft.save(get_sku_url)
             get_store_url = "https://rms.shop.jd.com/json/pop/shopInfo.action?ids={}".format(venderid)
             price_dic = requests.get(get_sku_url, headers=self.headers)
             stort_dic = requests.get(get_store_url, headers=self.headers)
@@ -84,7 +92,13 @@ class Jd_mobile(object):
             dic['version'] = version
             dic['weight'] = weight
             data_list.append(dic)
-            # print('商品{}爬取完成'.format(data_sku))
+            print('商品{}爬取完成'.format(data_sku))
+            ft = Redis_filter()
+            d = ft.get(dic)
+            if d:
+                print('__________该商品已经存在！________跳过该商品')
+                continue
+            ft.save(dic)
             self.save_to_mongo(dic)
         # self.save_to_mongo(data_list)
 
@@ -144,7 +158,7 @@ class Jd_mobile(object):
 
 
         #不使用多进程跑程序
-        for url in detail_url_list[:2]:
+        for url in detail_url_list[:4]:
             self.parse(url)
 
 
