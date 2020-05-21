@@ -16,3 +16,22 @@ get jd mobile info
 >1，使用多进程时，尽量使自己的程序是单线运行。<br>
 >2，使用gevent时，放在最后的for循环最好处理。<br>
 >3，gevent 放在循环的地方，循环数据至少5个才能很好看到效果。<br>
+
+**简单示例**<br>
+import time<br>
+import gevent<br>
+from gevent import monkey<br>
+monkey.patch_all()<br>
+    
+    def f1(i):
+        time.sleep(5)
+        return i
+
+    g_list = []
+    for i in range(10):
+        g = gevent.spawn(f1,i)
+        g_list.append(g)
+    items = gevent.joinall(g_list)
+    for item in items:
+        print('返回值是：',item.value)
+
